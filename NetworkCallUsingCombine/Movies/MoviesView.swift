@@ -15,31 +15,38 @@ struct MoviesView: View {
         
         List(viewModel.movies) { movie in
             
-            HStack {
-                AsyncImage(url: movie.posterURL) { poster in
-                    poster
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100)
-                } placeholder: {
-                    ProgressView()
-                        .frame(width: 100)
-                }
+            NavigationLink {
                 
-                VStack(alignment: .leading) {
-                    Text(movie.title)
-                        .font(.headline)
-                    Text(movie.overview)
-                        .font(.caption)
-                        .lineLimit(3)
+            } label: {
+                
+                HStack {
+                    AsyncImage(url: movie.posterURL) { poster in
+                        poster
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100)
+                    } placeholder: {
+                        ProgressView()
+                            .frame(width: 100)
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text(movie.title)
+                            .font(.headline)
+                        Text(movie.overview)
+                            .font(.caption)
+                            .lineLimit(3)
+                    }
+                }.onAppear{
+                    print("movie.posterURL = \(String(describing: movie.posterURL))")
                 }
-            }.onAppear{
-                print("movie.posterURL = \(String(describing: movie.posterURL))")
             }
             
-        }.onAppear{
-            viewModel.fetchMovie()
-        }
+        }.navigationTitle("Upcoming Movies")
+            .searchable(text: $viewModel.searchQuery)
+            .onAppear{
+                viewModel.fetchMovie()
+            }
         
     }
 }

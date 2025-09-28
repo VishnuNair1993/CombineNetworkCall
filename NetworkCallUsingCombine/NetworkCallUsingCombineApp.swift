@@ -11,7 +11,9 @@ import SwiftUI
 struct NetworkCallUsingCombineApp: App {
     var body: some Scene {
         WindowGroup {
-            MoviesView()
+            NavigationView {
+                MoviesView()
+            }
         }
     }
 }
