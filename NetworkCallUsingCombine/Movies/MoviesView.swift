@@ -8,14 +8,39 @@
 import SwiftUI
 
 struct MoviesView: View {
+    
+    @StateObject private var viewModel: MovieViewModel = MovieViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        
+        List(viewModel.movies) { movie in
+            
+            HStack {
+                AsyncImage(url: movie.posterURL) { poster in
+                    poster
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 100)
+                } placeholder: {
+                    ProgressView()
+                        .frame(width: 100)
+                }
+                
+                VStack(alignment: .leading) {
+                    Text(movie.title)
+                        .font(.headline)
+                    Text(movie.overview)
+                        .font(.caption)
+                        .lineLimit(3)
+                }
+            }.onAppear{
+                print("movie.posterURL = \(String(describing: movie.posterURL))")
+            }
+            
+        }.onAppear{
+            viewModel.fetchMovie()
         }
-        .padding()
+        
     }
 }
 
